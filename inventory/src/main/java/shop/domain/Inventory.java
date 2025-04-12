@@ -25,11 +25,6 @@ public class Inventory {
 
     @PostPersist
     public void onPostPersist() {
-        InventoryDecreased inventoryDecreased = new InventoryDecreased(this);
-        inventoryDecreased.publishAfterCommit();
-
-        InventoryIncreased inventoryIncreased = new InventoryIncreased(this);
-        inventoryIncreased.publishAfterCommit();
     }
 
     public static InventoryRepository repository() {
@@ -49,17 +44,17 @@ public class Inventory {
 
         */
 
-        /** Example 2:  finding and process
-        
-
-        repository().findById(orderPlaced.get???()).ifPresent(inventory->{
+        repository().findById(
+                Long.valueOf(orderPlaced.getProductId())
+            ).ifPresent(inventory->{
             
-            inventory // do something
+            inventory.setStock(inventory.getStock() - orderPlaced.getQty());
             repository().save(inventory);
 
+            InventoryDecreased inventoryDecreased = new InventoryDecreased(inventory);
+            inventoryDecreased.publishAfterCommit();
 
          });
-        */
 
     }
 
@@ -82,7 +77,8 @@ public class Inventory {
             inventory // do something
             repository().save(inventory);
 
-
+            InventoryIncreased inventoryIncreased = new InventoryIncreased(this);
+            inventoryIncreased.publishAfterCommit();
          });
         */
 

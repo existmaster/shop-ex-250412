@@ -30,14 +30,10 @@ spring:
       bindings:
         event-in:
           group: order
-#<<< EDA / Topic Name
           destination: shop
-#>>> EDA / Topic Name
           contentType: application/json
         event-out:
-#<<< EDA / Topic Name
           destination: shop
-#>>> EDA / Topic Name
           contentType: application/json
 
 logging:
